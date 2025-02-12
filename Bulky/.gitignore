@@ -1,0 +1,21 @@
+# Build directories
+bin/
+obj/
+# User-specific files
+*.user
+*.suo
+.vs/
+/.vs
+.idea
+
+# Logs
+*.log
+
+# NuGet packages
+packages/
+*.nupkg
+
+# Environment-specific files
+appsettings.json
+appsettings.*.json
+secrets.json
