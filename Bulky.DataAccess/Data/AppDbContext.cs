@@ -1,4 +1,4 @@
-﻿using Bulky.Models;
+﻿using Bulky.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 
