@@ -1,22 +1,24 @@
 ﻿using Bulky.Data;
-using Bulky.Models;
+using Bulky.DataAccess.Repository.IRepository;
+using Bulky.Models.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Bulky.Controllers;
+namespace Bulky.Areas.Admin.Controllers;
 
 public class CategoryController : Controller
 {
-    private AppDbContext db;
-    public CategoryController(AppDbContext ctx)
+    private ICategoryRepository _repo;
+    public CategoryController(ICategoryRepository categoryRepo)
     {
-        db = ctx;
+        _repo = categoryRepo;
     }
-    // GET
+
     public IActionResult Index()
     {
-        var categories = db.Categories.ToList();
+        var categories = _repo.GetAll();
         return View(categories);
     }
+
     #region Create
     public IActionResult Create()
     {
@@ -35,13 +37,13 @@ public class CategoryController : Controller
             ModelState.AddModelError("Name", "Name must be string");
             return View(category);
         }
-        if(category.Name == category.DisplayOrder.ToString())
+        if (category.Name == category.DisplayOrder.ToString())
         {
             ModelState.AddModelError("Name", "Name must Not equal order display");
             return View(category);
         }
-        db.Categories.Add(category);
-        db.SaveChanges();
+        _repo.Add(category);
+        _repo.Save();
         TempData["Success"] = "Category has been added successfully";
         return RedirectToAction("Index");
     }
@@ -49,32 +51,34 @@ public class CategoryController : Controller
 
     #region Edit
     [HttpGet]
-    public IActionResult Edit(int? id)
+    public IActionResult Edit(int id)
     {
-        if(id == null)
+        if (id == null)
         {
             return NotFound();
         }
-        var category = db.Categories.Find(id);
+        var category = _repo.Get(id);
         return View(category);
     }
+
     [HttpPost]
     public IActionResult Edit(Category obj)
     {
-        if(!ModelState.IsValid) return View(obj);
-        db.Categories.Update(obj);
-        db.SaveChanges();
+        if (!ModelState.IsValid) return View(obj);
+        _repo.Update(obj);
+        _repo.Save();
         TempData["Success"] = "Category has been updated successfully";
         return RedirectToAction("Index");
     }
     #endregion
 
     #region Delete
-    public IActionResult Delete(int id) {
-    var category = db.Categories.Find(id);
+    public IActionResult Delete(int id)
+    {
+        var category = _repo.Get(id);
         if (category == null) return NotFound();
-        db.Categories.Remove(category);
-        db.SaveChanges();
+        _repo.Remove(category);
+        _repo.Save();
         TempData["Success"] = "Category has been deleted successfully";
         return RedirectToAction("Index");
     }
