@@ -8,8 +8,8 @@ namespace Bulky.DataAccess.Repository.IRepository
 {
     public interface IRepository<T> where T : class
     {
-        IEnumerable<T> GetAll();
-        T Get(int id);
+        IEnumerable<T> GetAll( string? include = null);
+        T Get(int id,string? include=null);
         void Add(T entity);
         void Remove(T entity);
         void RemoveRange(IEnumerable<T> entity);
