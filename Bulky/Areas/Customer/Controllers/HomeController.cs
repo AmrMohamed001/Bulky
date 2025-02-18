@@ -4,7 +4,7 @@ using Bulky.Models.Models;
 using Bulky.DataAccess.Repository.IRepository;
 
 namespace Bulky.Areas.Customer.Controllers;
-
+[Area("Customer")]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
