@@ -1,0 +1,169 @@
+﻿@model Product
+<style>
+    .book-details {
+        background: #f8f9fa;
+        min-height: 100vh;
+        padding: 2rem 0;
+    }
+
+    .card-gradient {
+        background: #343a40;
+    }
+
+    .glass-card {
+        background: #fff;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+
+    .book-image {
+        transition: all 0.3s ease;
+    }
+
+    .book-image:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .price-table {
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+    }
+
+    .price-header {
+        background: #343a40;
+        color: white;
+        padding: 0.75rem;
+    }
+
+    .price-cell {
+        padding: 0.75rem;
+        transition: background-color 0.2s ease;
+    }
+
+    .price-cell:hover {
+        background-color: #f8f9fa;
+    }
+
+    .quantity-input {
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        padding: 0.5rem;
+        width: 100%;
+        max-width: 150px;
+    }
+
+    .back-btn {
+        color: #343a40;
+        border-color: #343a40;
+    }
+
+    .back-btn:hover {
+        background-color: #343a40;
+        color: white;
+    }
+
+    .add-to-cart-btn {
+        background: #343a40;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .badge-custom {
+        background: #343a40;
+        padding: 0.5rem 1rem;
+    }
+</style>
+
+<div class="book-details">
+    <form method="post" class="container">
+        <div class="card glass-card border-0">
+            <div class="card-header card-gradient text-light py-4">
+                <div class="text-center" data-aos="fade-down">
+                    <h2 class="text-white fw-bold mb-2">@Model.Title</h2>
+                    <p class="text-white-50 mb-0">by @Model.Author</p>
+                </div>
+            </div>
+            <div class="card-body p-4">
+                <div class="mb-4">
+                    <a href="/" class="back-btn btn btn-outline-dark">
+                        <i class="bi bi-arrow-left me-2"></i> Back to Home
+                    </a>
+                </div>
+                <div class="row g-5">
+                    <div class="col-12 col-lg-4">
+                        <img src="~/@Model.ImageUrl" class="book-image rounded w-100" alt="@Model.Title" />
+                    </div>
+                    <div class="col-12 col-lg-8">
+                        <span class="badge badge-custom text-white mb-4">@Model.Category.Name</span>
+                        
+                        <div class="mb-4">
+                            <h6 class="text-muted mb-3">
+                                <i class="bi bi-upc me-2"></i>
+                                <strong>ISBN:</strong> @Model.ISBN
+                            </h6>
+                            <h6 class="text-danger">
+                                <i class="bi bi-tag me-2"></i>
+                                <strong>List Price:</strong> 
+                                <span class="text-decoration-line-through">@Model.ListPrice.ToString("c")</span>
+                            </h6>
+                        </div>
+
+                        <div class="price-table mb-4">
+                            <div class="row text-center g-0">
+                                <div class="col-3 price-header">Quantity</div>
+                                <div class="col-3 price-header">1-50</div>
+                                <div class="col-3 price-header">51-100</div>
+                                <div class="col-3 price-header">100+</div>
+                            </div>
+                            <div class="row text-center g-0">
+                                <div class="col-3 price-cell">Price</div>
+                                <div class="col-3 price-cell">@Model.Price.ToString("c")</div>
+                                <div class="col-3 price-cell">@Model.Price50.ToString("c")</div>
+                                <div class="col-3 price-cell">@Model.Price100.ToString("c")</div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 p-3 bg-light rounded">
+                            <h5 class="text-dark mb-3">
+                                <i class="bi bi-book me-2"></i>Description
+                            </h5>
+                            <p class="text-muted">@Html.Raw(@Model.Description)</p>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Quantity:</label>
+                                <input type="number" value="1" min="1" 
+                                       class="quantity-input form-control" />
+                            </div>
+                            <div class="col-md-8">
+                                <label class="form-label">&nbsp;</label>
+                                <button type="submit" disabled 
+                                        class="add-to-cart-btn btn btn-dark w-100">
+                                    <i class="bi bi-cart-plus me-2"></i> Add to Cart (Coming Soon...)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Add smooth number input handling
+        const quantityInput = document.querySelector('.quantity-input');
+        quantityInput.addEventListener('input', function() {
+            if (this.value < 1) this.value = 1;
+        });
+    </script>
+}
