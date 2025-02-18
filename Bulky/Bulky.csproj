@@ -14,6 +14,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.11" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.11" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.1">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -23,6 +25,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Bulky.DataAccess\Bulky.DataAccess.csproj" />
+      <ProjectReference Include="..\Bulky.Utility\Bulky.Utility.csproj" />
     </ItemGroup>
 
     <ItemGroup>

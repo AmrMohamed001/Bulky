@@ -1,14 +1,21 @@
 ﻿using Bulky.Models.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 
 namespace Bulky.Data;
 
-public class AppDbContext:DbContext
+
+
+public class AppDbContext: IdentityDbContext<IdentityUser>
 {
     public AppDbContext(DbContextOptions<AppDbContext> opt):base(opt) {}
+
+    #region DBsets
     public DbSet<Category> Categories { get; set; }
     public DbSet<Product> Products { get; set; }
+    public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+    #endregion
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
