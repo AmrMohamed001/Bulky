@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using Bulky.DataAccess.Repository.IRepository;
 using Bulky.Models.Models;
 using Bulky.Utility;
 using Microsoft.AspNetCore.Authentication;
@@ -30,6 +31,7 @@ namespace BulkyBookWeb.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly ICompanyRepository _companyRepo;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -37,7 +39,8 @@ namespace BulkyBookWeb.Areas.Identity.Pages.Account
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ICompanyRepository companyRepository)
         {
             _roleManager = roleManager;
             _userManager = userManager;
@@ -46,6 +49,7 @@ namespace BulkyBookWeb.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _companyRepo= companyRepository;
         }
 
         /// <summary>
@@ -114,6 +118,10 @@ namespace BulkyBookWeb.Areas.Identity.Pages.Account
             public string? PostalCode { get; set; }
             public string? PhoneNumber { get; set; }
 
+            public string? CompanyId { get; set; }
+            [ValidateNever]
+            public IEnumerable<SelectListItem> CompanyList { get; set; }
+
         }
 
 
@@ -133,6 +141,12 @@ namespace BulkyBookWeb.Areas.Identity.Pages.Account
                 {
                     Text = i,
                     Value = i
+                }),
+
+                CompanyList = _companyRepo.GetAll().Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString()
                 })
             };
 
@@ -156,6 +170,7 @@ namespace BulkyBookWeb.Areas.Identity.Pages.Account
                 user.State = Input.State;
                 user.PostalCode = Input.PostalCode;
                 user.PhoneNumber = Input.PhoneNumber;
+                if(Input.Role == SD.Role_User_Comp) user.CompanyId = Convert.ToInt32(Input.CompanyId);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
